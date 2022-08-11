@@ -22,4 +22,4 @@ COPY requirements.txt ./requirements.txt
 RUN /bin/bash -c "source activate ml \
     && pip install -r requirements.txt"
 
-RUN python3 test.py
+RUN streamlit run test.py
