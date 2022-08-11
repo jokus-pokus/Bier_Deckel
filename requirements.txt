@@ -1,6 +1,6 @@
 tensorflow
 tensorflow_hub
-PIL
+Pillow
 numpy
 pandas
 matplotlib
