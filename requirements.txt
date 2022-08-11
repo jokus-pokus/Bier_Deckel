@@ -1,0 +1,8 @@
+tensorflow
+tensorflow_hub
+PIL
+numpy
+pandas
+matplotlib
+scipy
+os
