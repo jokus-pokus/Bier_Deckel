@@ -101,4 +101,6 @@ for Bild , Dist in PrintData.itertuples(index=False):
 df = df.iloc[0:0]
 PrintData = PrintData.iloc[0:0]
 PicData = PicData.iloc[0:0]
+
 os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
+del uploaded_file
