@@ -33,10 +33,10 @@ def extract(file):
 # 	img = Image.open(image_file)
 # 	return img
 
-uploaded_file = st.file_uploader("Choose a file")
+uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten funktioniert es wenn der Korken zugeschnittten ist!")
 
-file_details = {"filename":uploaded_file.name, "filetype":uploaded_file.type,"filesize":uploaded_file.size}
-st.write(file_details)
+# file_details = {"filename":uploaded_file.name, "filetype":uploaded_file.type,"filesize":uploaded_file.size}
+# st.write(file_details)
 
 #save image to directory so i can open it with a path
 with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
