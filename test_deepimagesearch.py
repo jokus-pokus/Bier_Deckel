@@ -18,7 +18,7 @@ from DeepImageSearch import Index,LoadData,SearchImage
 
 uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten funktioniert es wenn der Korken zugeschnittten ist!")
 
-image_pathtest = "BierDeckel\\"+uploaded_file.name
+image_pathtest = "BierDeckel/"+uploaded_file.name
 
 image_list = LoadData().from_folder(folder_list = ['BierDeckel'])
 
