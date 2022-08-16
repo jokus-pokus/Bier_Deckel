@@ -13,20 +13,22 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-
 def extract(file):
-  file = Image.open(file).convert('L').resize(IMAGE_SHAPE)
+    file = Image.open(file).convert('L').resize(IMAGE_SHAPE)
 
-  file = np.stack((file,)*3, axis=-1)
+    file = np.stack((file,)*3, axis=-1)
 
-  file = np.array(file)/255.0
+    file = np.array(file)/255.0
 
-  embedding = model.predict(file[np.newaxis, ...])
+    embedding = model.predict(file[np.newaxis, ...])
 
-  vgg16_feature_np = np.array(embedding)
-  flattended_feature = vgg16_feature_np.flatten()
+    vgg16_feature_np = np.array(embedding)
+    flattended_feature = vgg16_feature_np.flatten()
 
-  return flattended_feature
+    return flattended_feature
+
+
+
 
 # #Load function for uploaded file
 # def load_image(image_file):
@@ -40,7 +42,7 @@ uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten
 
 #save image to directory so i can open it with a path
 with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
-			  	f.write((uploaded_file).getbuffer())
+                f.write((uploaded_file).getbuffer())
 
 #st.image(uploaded_file)
 
@@ -57,7 +59,7 @@ df = pd.DataFrame(columns=['Bild', 'Vektor'])
 #Process all files in folder
 folder_dir = "BierDeckel"
 for images in os.listdir(folder_dir):
- 
+
     # check if the image ends with png
     if (images.endswith(".jpg")):
         vector = extract(folder_dir+'/'+images)
@@ -101,6 +103,6 @@ for Bild , Dist in PrintData.itertuples(index=False):
 df = df.iloc[0:0]
 PrintData = PrintData.iloc[0:0]
 PicData = PicData.iloc[0:0]
-
+del testinput
 os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
 del uploaded_file

@@ -5,12 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Aktuelle Datei",
+            "name": "Streamlit",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "C://Anaconda//Scripts//streamlit.exe",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "args": ["run","test.py"]
         }
     ]
 }
