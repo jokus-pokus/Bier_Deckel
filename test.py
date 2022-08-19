@@ -48,7 +48,8 @@ with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
 
 model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
 
-IMAGE_SHAPE = (224, 224)
+#IMAGE_SHAPE = (224, 224)
+IMAGE_SHAPE = (1024, 1024)
 
 layer = hub.KerasLayer(model_url)
 model = tf.keras.Sequential([layer])
@@ -84,7 +85,7 @@ for ind in df.index:
     PicData = PicData.append(new_row,ignore_index=True)
 PicData.Dist = PicData.Dist.astype('float32')
 
-PrintData = PicData.sort_values(by=['Dist']).head(3)
+PrintData = PicData.sort_values(by=['Dist']).head(5)
 
 
 # #Über alle Bilder itterieren
@@ -97,7 +98,7 @@ for Bild , Dist in PrintData.itertuples(index=False):
     #fig.suptitle(np.round_(Dist,decimals=3))
     #im = ax.imshow(im, extent=[0, 300, 0, 300])
     #plt.show()
-    st.image(im)
+    st.image(im,caption=Bild)
 
 #Aufräumen
 df = df.iloc[0:0]
