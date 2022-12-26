@@ -1,25 +1,19 @@
-FROM ubuntu:latest
+# app/Dockerfile
 
-ENV PATH="/root/miniconda3/bin:${PATH}"
-ARG PATH="/root/miniconda3/bin:${PATH}"
+FROM python:3.9-slim
 
-RUN apt update \
-    && apt install -y htop python3-dev wget
+EXPOSE 8501
 
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && mkdir root/.conda \
-    && sh Miniconda3-latest-Linux-x86_64.sh -b \
-    && rm -f Miniconda3-latest-Linux-x86_64.sh
+WORKDIR /app
 
-RUN conda create -y -n ml python=3.9
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    software-properties-common \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
+RUN git clone https://github.com/jokus-pokus/Bier_Deckel .
 
+RUN pip3 install -r requirements.txt
 
-COPY test.py ./test.py
-COPY requirements.txt ./requirements.txt
-
-
-RUN /bin/bash -c "source activate ml \
-    && pip install -r requirements.txt"
-
-RUN streamlit run test.py
+ENTRYPOINT ["streamlit", "run", "test.py", "--server.port=8501", "--server.address=0.0.0.0"]
