@@ -18,13 +18,16 @@ from DeepImageSearch import Index,LoadData,SearchImage
 
 uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten funktioniert es wenn der Korken zugeschnittten ist!")
 
-image_pathtest = "BierDeckel/"+uploaded_file.name
+if uploaded_file is not None:
+    image_pathtest = "BierDeckel/"+uploaded_file.name
 
-image_list = LoadData().from_folder(folder_list = ['BierDeckel'])
+    image_list = LoadData().from_folder(folder_list = ['BierDeckel'])
 
-Index(image_list).Start()
+    Index(image_list).Start()
 
-images = SearchImage().get_similar_images(image_path=image_pathtest,number_of_images=5)
+    images = SearchImage().get_similar_images(image_path=image_pathtest,number_of_images=5)
 
-for key, value in images.items():
-    st.image(value)
+    for key, value in images.items():
+        st.image(value)
+else:
+    st.write("Bitte ein Bild hochladen!")

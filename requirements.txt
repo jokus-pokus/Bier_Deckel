@@ -8,3 +8,4 @@ matplotlib
 scipy
 tqdm
 annoy
+protobuf==4.21
