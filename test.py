@@ -37,72 +37,79 @@ def extract(file):
 
 uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten funktioniert es wenn der Korken zugeschnittten ist!")
 
-# file_details = {"filename":uploaded_file.name, "filetype":uploaded_file.type,"filesize":uploaded_file.size}
-# st.write(file_details)
+if uploaded_file is not None: 
+    # file_details = {"filename":uploaded_file.name, "filetype":uploaded_file.type,"filesize":uploaded_file.size}
+    # st.write(file_details)
 
-#save image to directory so i can open it with a path
-with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
-                f.write((uploaded_file).getbuffer())
+    #save image to directory so i can open it with a path
+    with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
+                    f.write((uploaded_file).getbuffer())
 
-#st.image(uploaded_file)
+    st.write("Dein Bild:")
+    st.image(uploaded_file)
 
-model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
+    model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
 
-IMAGE_SHAPE = (224, 224)
+    IMAGE_SHAPE = (224, 224)
 
-layer = hub.KerasLayer(model_url)
-model = tf.keras.Sequential([layer])
-
-
-df = pd.DataFrame(columns=['Bild', 'Vektor'])
-
-#Process all files in folder
-folder_dir = "BierDeckel"
-for images in os.listdir(folder_dir):
-
-    # check if the image ends with png
-    if (images.endswith(".jpg")):
-        vector = extract(folder_dir+'/'+images)
-        #print(vector.size)
-        new_row = {'Bild':images, 'Vektor':vector}
-        df = df.append(new_row,ignore_index=True)
-        #print(images)
-
-# #Process the uploaded file
-# vector =  extract(str(uploaded_file.name))
-# new_row = {'Bild':'newImage', 'Vektor':vector}
-# df = df.append(new_row,ignore_index=True)
-
-testinput = df['Vektor'].iloc[-1] 
-
-#Calc distances
-PicData = pd.DataFrame(columns=['Bild', 'Dist'])
-for ind in df.index:
-    dc = distance.cdist([testinput], [df.Vektor[ind]], metric='cosine')[0] #cosine
-    #print(dc)
-    new_row = {'Bild':df.Bild[ind], 'Dist':dc}
-    PicData = PicData.append(new_row,ignore_index=True)
-PicData.Dist = PicData.Dist.astype('float32')
-
-PrintData = PicData.sort_values(by=['Dist']).head(3)
+    layer = hub.KerasLayer(model_url)
+    model = tf.keras.Sequential([layer])
 
 
-# #Über alle Bilder itterieren
+    df = pd.DataFrame(columns=['Bild', 'Vektor'])
 
-for Bild , Dist in PrintData.itertuples(index=False):
-    #plt.rcParams["figure.figsize"] = [2, 2]
-    #plt.rcParams["figure.autolayout"] = True
-    im = plt.imread("BierDeckel/"+Bild)
-    #fig, ax = plt.subplots()
-    #fig.suptitle(np.round_(Dist,decimals=3))
-    #im = ax.imshow(im, extent=[0, 300, 0, 300])
-    #plt.show()
-    st.image(im)
+    #Process all files in folder
+    folder_dir = "BierDeckel"
+    for images in os.listdir(folder_dir):
 
-#Aufräumen
-df = df.iloc[0:0]
-PrintData = PrintData.iloc[0:0]
-PicData = PicData.iloc[0:0]
-del testinput
-os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
-del uploaded_file
+        # check if the image ends with png
+        if (images.endswith(".jpg")):
+            vector = extract(folder_dir+'/'+images)
+            #print(vector.size)
+            new_row = {'Bild':images, 'Vektor':vector}
+            df = df.append(new_row,ignore_index=True)
+            #print(images)
+
+    # #Process the uploaded file
+    # vector =  extract(str(uploaded_file.name))
+    # new_row = {'Bild':'newImage', 'Vektor':vector}
+    # df = df.append(new_row,ignore_index=True)
+
+    testinput = df['Vektor'].iloc[-1] 
+
+    #Calc distances
+    PicData = pd.DataFrame(columns=['Bild', 'Dist'])
+    for ind in df.index:
+        dc = distance.cdist([testinput], [df.Vektor[ind]], metric='cosine')[0] #cosine
+        #print(dc)
+        new_row = {'Bild':df.Bild[ind], 'Dist':dc}
+        PicData = PicData.append(new_row,ignore_index=True)
+    PicData.Dist = PicData.Dist.astype('float32')
+
+    PrintData = PicData.sort_values(by=['Dist']).head(3)
+
+
+    # #Über alle Bilder itterieren
+    st.write("Die möglichen Doppel:")
+    for Bild , Dist in PrintData.itertuples(index=False):
+        #plt.rcParams["figure.figsize"] = [2, 2]
+        #plt.rcParams["figure.autolayout"] = True
+        im = plt.imread("BierDeckel/"+Bild)
+        #fig, ax = plt.subplots()
+        #fig.suptitle(np.round_(Dist,decimals=3))
+        #im = ax.imshow(im, extent=[0, 300, 0, 300])
+        #plt.show()
+        st.image(im)
+
+
+    #Aufräumen
+    #st.legacy_caching.clear_cache()
+    del(df)
+    del(PrintData)
+    del(PicData)
+    del(testinput)
+    os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
+    del(uploaded_file)
+else: 
+    st.write("Bitte ein Bild hochladen!")
+
