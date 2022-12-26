@@ -102,14 +102,14 @@ if uploaded_file is not None:
         st.image(im)
 
 
-    #Aufräumen
-    #st.legacy_caching.clear_cache()
-    del(df)
-    del(PrintData)
-    del(PicData)
-    del(testinput)
-    os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
-    del(uploaded_file)
-else: 
-    st.write("Bitte ein Bild hochladen!")
+        #Aufräumen
+        #st.legacy_caching.clear_cache()
+        del(df)
+        del(PrintData)
+        del(PicData)
+        del(testinput)
+        os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
+        del(uploaded_file)
+    else: 
+        st.write("Bitte ein Bild hochladen!")
 
