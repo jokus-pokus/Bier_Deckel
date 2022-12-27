@@ -13,7 +13,19 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+@st.experimental_singleton
+def load_model():
+    model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
+
+    layer = hub.KerasLayer(model_url)
+    model = tf.keras.Sequential([layer])
+    return model
+
+model = load_model()
+
 def extract(file):
+    IMAGE_SHAPE = (224, 224)
+
     file = Image.open(file).convert('L').resize(IMAGE_SHAPE)
 
     file = np.stack((file,)*3, axis=-1)
@@ -28,18 +40,9 @@ def extract(file):
     return flattended_feature
 
 
-
-
-# #Load function for uploaded file
-# def load_image(image_file):
-# 	img = Image.open(image_file)
-# 	return img
-
 uploaded_file = st.file_uploader("Lade einen Kronkorken als .jpg hoch. Am besten funktioniert es wenn der Korken zugeschnittten ist!")
 
-if uploaded_file is not None: 
-    # file_details = {"filename":uploaded_file.name, "filetype":uploaded_file.type,"filesize":uploaded_file.size}
-    # st.write(file_details)
+if uploaded_file: 
 
     #save image to directory so i can open it with a path
     with open(os.path.join("BierDeckel","testfile"+uploaded_file.name),"wb") as f:
@@ -47,14 +50,6 @@ if uploaded_file is not None:
 
     st.write("Dein Bild:")
     st.image(uploaded_file)
-
-    model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
-
-    IMAGE_SHAPE = (224, 224)
-
-    layer = hub.KerasLayer(model_url)
-    model = tf.keras.Sequential([layer])
-
 
     df = pd.DataFrame(columns=['Bild', 'Vektor'])
 
@@ -68,12 +63,7 @@ if uploaded_file is not None:
             #print(vector.size)
             new_row = {'Bild':images, 'Vektor':vector}
             df = df.append(new_row,ignore_index=True)
-            #print(images)
 
-    # #Process the uploaded file
-    # vector =  extract(str(uploaded_file.name))
-    # new_row = {'Bild':'newImage', 'Vektor':vector}
-    # df = df.append(new_row,ignore_index=True)
 
     testinput = df['Vektor'].iloc[-1] 
 
@@ -92,24 +82,17 @@ if uploaded_file is not None:
     # #Über alle Bilder itterieren
     st.write("Die möglichen Doppel:")
     for Bild , Dist in PrintData.itertuples(index=False):
-        #plt.rcParams["figure.figsize"] = [2, 2]
-        #plt.rcParams["figure.autolayout"] = True
         im = plt.imread("BierDeckel/"+Bild)
-        #fig, ax = plt.subplots()
-        #fig.suptitle(np.round_(Dist,decimals=3))
-        #im = ax.imshow(im, extent=[0, 300, 0, 300])
-        #plt.show()
         st.image(im)
 
-
         #Aufräumen
-        #st.legacy_caching.clear_cache()
     del(df)
     del(PrintData)
     del(PicData)
     del(testinput)
     os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
     del(uploaded_file)
+
 else: 
         st.write("Bitte ein Bild hochladen!")
 

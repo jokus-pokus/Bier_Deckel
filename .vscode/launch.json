@@ -8,7 +8,7 @@
             "name": "Streamlit",
             "type": "python",
             "request": "launch",
-            "program": "C://Anaconda//Scripts//streamlit.exe",
+            "program": "C://Users//Jochen//.conda//envs//BierDeckel//Scripts//streamlit.exe",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["run","test.py"]
