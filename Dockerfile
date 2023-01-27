@@ -1,6 +1,7 @@
 # app/Dockerfile
 
-FROM ubuntu:kinetic
+#FROM ubuntu:kinetic
+FROM python:3.9.7
 
 EXPOSE 8501
 
