@@ -13,7 +13,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-@st.experimental_singleton
+@st.cache_resource
 def load_model():
     model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
 

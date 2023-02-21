@@ -69,16 +69,23 @@ if uploaded_file:
     # sort the results
     results = sorted([(v, k) for (k, v) in results.items()])
     results = results[:5]
+    results = results[1:]
+
     # show the query image
     st.write("Dein Bild:")
     st.image(uploaded_file)
     
-
+    st.write("Die möglichen Doppel:")
     for images in results:    
         st.image(images[1])
-        
-        
-    os.remove("BierDeckel/"+"testfile"+uploaded_file.name)
+
+    #Neues Bild in der DB Speichern?    
+    if st.button('Neues Bild in der DB Speichern?'):
+        st.write("Bild wurde gespeichert!")
+    else:
+        st.write("Bild wurde nicht gespeichert!")
+        os.remove("BierDeckel/"+"testfile"+uploaded_file.name)
+    
     
 
 else: 
