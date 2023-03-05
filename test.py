@@ -76,7 +76,8 @@ if uploaded_file:
         PicData = PicData.append(new_row,ignore_index=True)
     PicData.Dist = PicData.Dist.astype('float32')
 
-    PrintData = PicData.sort_values(by=['Dist']).head(3)
+    PrintData = PicData.sort_values(by=['Dist']).head(6)
+    PrintData = PrintData.iloc[1:]
 
 
     # #Über alle Bilder itterieren
@@ -90,8 +91,16 @@ if uploaded_file:
     del(PrintData)
     del(PicData)
     del(testinput)
-    os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
-    del(uploaded_file)
+    #os.remove("BierDeckel/"+"testfile"+uploaded_file.name) 
+    #del(uploaded_file)
+
+    #Neues Bild in der DB Speichern?    
+    if st.button('Neues Bild in der DB Speichern?'):
+        st.write("Bild wurde gespeichert!")
+    else:
+        st.write("Bild wurde nicht gespeichert!")
+        os.remove("BierDeckel/"+"testfile"+uploaded_file.name)
+        del(uploaded_file)
 
 else: 
         st.write("Bitte ein Bild hochladen!")
