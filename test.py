@@ -101,6 +101,7 @@ if uploaded_file:
         st.write("Bild wurde nicht gespeichert!")
         os.remove("BierDeckel/"+"testfile"+uploaded_file.name)
         del(uploaded_file)
+        st.cache_resource.clear()
 
 else: 
         st.write("Bitte ein Bild hochladen!")
